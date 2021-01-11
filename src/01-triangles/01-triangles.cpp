@@ -24,17 +24,27 @@ const GLuint  NumVertices = 6;
 void
 init( void )
 {
-    glGenVertexArrays( NumVAOs, VAOs );
+    glGenVertexArrays( NumVAOs, VAOs );		// 创建 对象数组 (顶点数组对象)，该数组有NumVAOs个对象
     glBindVertexArray( VAOs[Triangles] );
 
-    GLfloat  vertices[NumVertices][2] = {
-        { -0.90f, -0.90f }, {  0.85f, -0.90f }, { -0.90f,  0.85f },  // Triangle 1
-        {  0.90f, -0.85f }, {  0.90f,  0.90f }, { -0.85f,  0.90f }   // Triangle 2
+    GLfloat  vertices[NumVertices][2] = 
+	{
+		//   X,      Y 
+        { -0.90f, -0.90f }, 
+		{  0.85f, -0.90f }, 
+		{ -0.90f,  0.85f },  // Triangle 1
+
+        {  0.90f, -0.85f }, 
+		{  0.90f,  0.90f }, 
+		{ -0.85f,  0.90f }   // Triangle 2
     };
 
-    glCreateBuffers( NumBuffers, Buffers );
+    glCreateBuffers( NumBuffers, Buffers ); // GPU缓存对象数组
     glBindBuffer( GL_ARRAY_BUFFER, Buffers[ArrayBuffer] );
-    glBufferStorage( GL_ARRAY_BUFFER, sizeof(vertices), vertices, 0);
+    glBufferStorage( GL_ARRAY_BUFFER, sizeof(vertices), vertices, 0); // 拷贝数据从CPU内存到GPU端 当前被激活的buffer(显存)中
+
+	GLfloat readback[12];
+	glGetNamedBufferSubData(Buffers[0], 0, sizeof(readback), readback);
 
     ShaderInfo  shaders[] =
     {
@@ -46,8 +56,7 @@ init( void )
     GLuint program = LoadShaders( shaders );
     glUseProgram( program );
 
-    glVertexAttribPointer( vPosition, 2, GL_FLOAT,
-                           GL_FALSE, 0, BUFFER_OFFSET(0) );
+    glVertexAttribPointer( vPosition, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0) );
     glEnableVertexAttribArray( vPosition );
 }
 
@@ -64,7 +73,9 @@ display( void )
     glClearBufferfv(GL_COLOR, 0, black);
 
     glBindVertexArray( VAOs[Triangles] );
-    glDrawArrays( GL_TRIANGLES, 0, NumVertices );
+	glDrawArrays(GL_TRIANGLES, 0, NumVertices);
+	//glPointSize(10.0f);
+	//glDrawArrays(GL_POINTS, 0, NumVertices);
 }
 
 //----------------------------------------------------------------------------
