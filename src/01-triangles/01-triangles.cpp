@@ -42,9 +42,15 @@ init( void )
     glCreateBuffers( NumBuffers, Buffers ); // GPU缓存对象数组
     glBindBuffer( GL_ARRAY_BUFFER, Buffers[ArrayBuffer] );
     glBufferStorage( GL_ARRAY_BUFFER, sizeof(vertices), vertices, 0); // 拷贝数据从CPU内存到GPU端 当前被激活的buffer(显存)中
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	
+	// feifei test: read buffer back
+	// GLfloat readback[12];
+	// glGetNamedBufferSubData(Buffers[0], 0, sizeof(readback), readback);
 
-	GLfloat readback[12];
-	glGetNamedBufferSubData(Buffers[0], 0, sizeof(readback), readback);
+	// feifei test: map buffer to cpu
+	// only for glBufferData()
+	//GLfloat * mapped_mem = (GLfloat*)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
 
     ShaderInfo  shaders[] =
     {
@@ -74,8 +80,8 @@ display( void )
 
     glBindVertexArray( VAOs[Triangles] );
 	glDrawArrays(GL_TRIANGLES, 0, NumVertices);
-	//glPointSize(10.0f);
-	//glDrawArrays(GL_POINTS, 0, NumVertices);
+	//glPointSize(15.0f); glDrawArrays(GL_POINTS, 0, NumVertices);
+	//glLineWidth(5.0f); glDrawArrays(GL_LINES, 0, NumVertices);
 }
 
 //----------------------------------------------------------------------------

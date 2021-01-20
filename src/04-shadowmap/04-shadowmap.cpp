@@ -21,51 +21,51 @@ using namespace vmath;
 #define DEPTH_TEXTURE_SIZE  2048
 
 BEGIN_APP_DECLARATION(ShadowMapExample)
-    // Override functions from base class
-    virtual void Initialize(const char * title);
-    virtual void Display(bool auto_redraw);
-    virtual void Finalize(void);
-    virtual void Resize(int width, int height);
+	// Override functions from base class
+	virtual void Initialize(const char * title);
+	virtual void Display(bool auto_redraw);
+	virtual void Finalize(void);
+	virtual void Resize(int width, int height);
 
-    // Member variables
-    float aspect;
+	// Member variables
+	float aspect;
 
-    // Program to render from the light's position
-    GLuint render_light_prog;
-    struct
-    {
-        GLint model_view_projection_matrix;
-    } render_light_uniforms;
+	// Program to render from the light's position
+	GLuint render_light_prog;
+	struct
+	{
+		GLint model_view_projection_matrix;
+	} render_light_uniforms;
 
-    // FBO to render depth with
-    GLuint  depth_fbo;
-    GLuint  depth_texture;
+	// FBO to render depth with
+	GLuint  depth_fbo;
+	GLuint  depth_texture;
 
-    // Program to render the scene from the viewer's position
-    GLuint render_scene_prog;
-    struct
-    {
-        GLint model_matrix;
-        GLint view_matrix;
-        GLint projection_matrix;
-        GLint shadow_matrix;
-        GLint light_position;
-        GLint material_ambient;
-        GLint material_diffuse;
-        GLint material_specular;
-        GLint material_specular_power;
-    } render_scene_uniforms;
+	// Program to render the scene from the viewer's position
+	GLuint render_scene_prog;
+	struct
+	{
+		GLint model_matrix;
+		GLint view_matrix;
+		GLint projection_matrix;
+		GLint shadow_matrix;
+		GLint light_position;
+		GLint material_ambient;
+		GLint material_diffuse;
+		GLint material_specular;
+		GLint material_specular_power;
+	} render_scene_uniforms;
 
-    // Ground plane
-    GLuint  ground_vbo;
-    GLuint  ground_vao;
+	// Ground plane
+	GLuint  ground_vbo;
+	GLuint  ground_vao;
 
-    VBObject object;
+	VBObject object;
 
-    GLint current_width;
-    GLint current_height;
+	GLint current_width;
+	GLint current_height;
 
-    void DrawScene(bool depth_only = false);
+	void DrawScene(bool depth_only = false);
 END_APP_DECLARATION()
 
 DEFINE_APP(ShadowMapExample, "Shadow Mapping Example")
@@ -246,46 +246,46 @@ void ShadowMapExample::Display(bool auto_redraw)
 
 void ShadowMapExample::DrawScene(bool depth_only)
 {
-    // Set material properties for the object
-    if (!depth_only)
-    {
-        glUniform3fv(render_scene_uniforms.material_ambient, 1, vec3(0.1f, 0.0f, 0.2f));
-        glUniform3fv(render_scene_uniforms.material_diffuse, 1, vec3(0.3f, 0.2f, 0.8f));
-        glUniform3fv(render_scene_uniforms.material_specular, 1, vec3(1.0f, 1.0f, 1.0f));
-        glUniform1f(render_scene_uniforms.material_specular_power, 25.0f);
-    }
+	// Set material properties for the object
+	if (!depth_only)
+	{
+		glUniform3fv(render_scene_uniforms.material_ambient, 1, vec3(0.1f, 0.0f, 0.2f));
+		glUniform3fv(render_scene_uniforms.material_diffuse, 1, vec3(0.3f, 0.2f, 0.8f));
+		glUniform3fv(render_scene_uniforms.material_specular, 1, vec3(1.0f, 1.0f, 1.0f));
+		glUniform1f(render_scene_uniforms.material_specular_power, 25.0f);
+	}
 
-    // Draw the object
-    object.Render();
+	// Draw the object
+	object.Render();
 
-    // Set material properties for the ground
-    if (!depth_only)
-    {
-        glUniform3fv(render_scene_uniforms.material_ambient, 1, vec3(0.1f, 0.1f, 0.1f));
-        glUniform3fv(render_scene_uniforms.material_diffuse, 1, vec3(0.1f, 0.5f, 0.1f));
-        glUniform3fv(render_scene_uniforms.material_specular, 1, vec3(0.1f, 0.1f, 0.1f));
-        glUniform1f(render_scene_uniforms.material_specular_power, 3.0f);
-    }
+	// Set material properties for the ground
+	if (!depth_only)
+	{
+		glUniform3fv(render_scene_uniforms.material_ambient, 1, vec3(0.1f, 0.1f, 0.1f));
+		glUniform3fv(render_scene_uniforms.material_diffuse, 1, vec3(0.1f, 0.5f, 0.1f));
+		glUniform3fv(render_scene_uniforms.material_specular, 1, vec3(0.1f, 0.1f, 0.1f));
+		glUniform1f(render_scene_uniforms.material_specular_power, 3.0f);
+	}
 
-    // Draw the ground
-    glBindVertexArray(ground_vao);
-    glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-    glBindVertexArray(0);
+	// Draw the ground
+	glBindVertexArray(ground_vao);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+	glBindVertexArray(0);
 }
 
 void ShadowMapExample::Finalize(void)
 {
-    glUseProgram(0);
-    glDeleteProgram(render_light_prog);
-    glDeleteProgram(render_scene_prog);
-    glDeleteBuffers(1, &ground_vbo);
-    glDeleteVertexArrays(1, &ground_vao);
+	glUseProgram(0);
+	glDeleteProgram(render_light_prog);
+	glDeleteProgram(render_scene_prog);
+	glDeleteBuffers(1, &ground_vbo);
+	glDeleteVertexArrays(1, &ground_vao);
 }
 
 void ShadowMapExample::Resize(int width, int height)
 {
-    current_width = width;
-    current_height = height;
+	current_width = width;
+	current_height = height;
 
-    aspect = float(height) / float(width);
+	aspect = float(height) / float(width);
 }
