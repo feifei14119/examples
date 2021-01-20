@@ -40,10 +40,15 @@ init( void )
     glCreateBuffers( NumBuffers, Buffers ); // create 1 buffer objs
     glBindBuffer( GL_ARRAY_BUFFER, Buffers[ArrayBuffer] );
     glBufferStorage( GL_ARRAY_BUFFER, sizeof(vertices), vertices, 0); // Memcpy H2D: from vertices(host) to active(bind) buffer obj 
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	
+	// feifei test: read buffer back
+	// GLfloat readback[12];
+	// glGetNamedBufferSubData(Buffers[0], 0, sizeof(readback), readback);
 
-    // ff-test: read back buffer
-	GLfloat readback[12];
-	glGetNamedBufferSubData(Buffers[0], 0, sizeof(readback), readback);
+	// feifei test: map buffer to cpu
+	// only for glBufferData()
+	//GLfloat * mapped_mem = (GLfloat*)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
 
     ShaderInfo  shaders[] =
     {
@@ -73,8 +78,8 @@ display( void )
 
     glBindVertexArray( VAOs[Triangles] );
 	glDrawArrays(GL_TRIANGLES, 0, NumVertices);
-	//glPointSize(10.0f);
-	//glDrawArrays(GL_POINTS, 0, NumVertices);
+	//glPointSize(15.0f); glDrawArrays(GL_POINTS, 0, NumVertices);
+	//glLineWidth(5.0f); glDrawArrays(GL_LINES, 0, NumVertices);
 }
 
 //----------------------------------------------------------------------------
