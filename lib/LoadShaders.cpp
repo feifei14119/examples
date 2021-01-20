@@ -57,14 +57,17 @@ LoadShaders(ShaderInfo* shaders)
     GLuint program = glCreateProgram();
 
     ShaderInfo* entry = shaders;
-    while ( entry->type != GL_NONE ) {
+    while ( entry->type != GL_NONE ) 
+    {
         GLuint shader = glCreateShader( entry->type );
 
         entry->shader = shader;
 
         const GLchar* source = ReadShader( entry->filename );
-        if ( source == NULL ) {
-            for ( entry = shaders; entry->type != GL_NONE; ++entry ) {
+        if ( source == NULL )
+        {
+            for ( entry = shaders; entry->type != GL_NONE; ++entry ) 
+            {
                 glDeleteShader( entry->shader );
                 entry->shader = 0;
             }
@@ -78,8 +81,9 @@ LoadShaders(ShaderInfo* shaders)
         glCompileShader( shader );
 
         GLint compiled;
-        glGetShaderiv( shader, GL_COMPILE_STATUS, &compiled );
-        if ( !compiled ) {
+        glGetShaderiv( shader, GL_COMPILE_STATUS, &compiled ); // get if the shader is flaged for deletion
+        if ( !compiled ) 
+        {
 #ifdef _DEBUG
             GLsizei len;
             glGetShaderiv( shader, GL_INFO_LOG_LENGTH, &len );
@@ -101,8 +105,9 @@ LoadShaders(ShaderInfo* shaders)
     glLinkProgram( program );
 
     GLint linked;
-    glGetProgramiv( program, GL_LINK_STATUS, &linked );
-    if ( !linked ) {
+    glGetProgramiv( program, GL_LINK_STATUS, &linked ); // get if last link opt is success
+    if ( !linked ) 
+    {
 #ifdef _DEBUG
         GLsizei len;
         glGetProgramiv( program, GL_INFO_LOG_LENGTH, &len );
@@ -113,7 +118,8 @@ LoadShaders(ShaderInfo* shaders)
         delete [] log;
 #endif /* DEBUG */
 
-        for ( entry = shaders; entry->type != GL_NONE; ++entry ) {
+        for ( entry = shaders; entry->type != GL_NONE; ++entry )
+        {
             glDeleteShader( entry->shader );
             entry->shader = 0;
         }

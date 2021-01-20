@@ -6,6 +6,7 @@
 
 #include "vgl.h"
 #include "LoadShaders.h"
+#include <stdio.h>
 
 enum VAO_IDs { Triangles, NumVAOs };
 enum Buffer_IDs { ArrayBuffer, NumBuffers };
@@ -14,7 +15,7 @@ enum Attrib_IDs { vPosition = 0 };
 GLuint  VAOs[NumVAOs];
 GLuint  Buffers[NumBuffers];
 
-const GLuint  NumVertices = 6;
+const GLuint  NumVertices = 3;
 
 //----------------------------------------------------------------------------
 //
@@ -24,25 +25,23 @@ const GLuint  NumVertices = 6;
 void
 init( void )
 {
-    glGenVertexArrays( NumVAOs, VAOs );		// 创建 对象数组 (顶点数组对象)，该数组有NumVAOs个对象
+    glGenVertexArrays( NumVAOs, VAOs );		// create 1 Vtx objs
     glBindVertexArray( VAOs[Triangles] );
 
+    // vertext host
     GLfloat  vertices[NumVertices][2] = 
 	{
 		//   X,      Y 
         { -0.90f, -0.90f }, 
 		{  0.85f, -0.90f }, 
-		{ -0.90f,  0.85f },  // Triangle 1
-
-        {  0.90f, -0.85f }, 
-		{  0.90f,  0.90f }, 
-		{ -0.85f,  0.90f }   // Triangle 2
+		{ -0.90f,  0.85f }
     };
 
-    glCreateBuffers( NumBuffers, Buffers ); // GPU缓存对象数组
+    glCreateBuffers( NumBuffers, Buffers ); // create 1 buffer objs
     glBindBuffer( GL_ARRAY_BUFFER, Buffers[ArrayBuffer] );
-    glBufferStorage( GL_ARRAY_BUFFER, sizeof(vertices), vertices, 0); // 拷贝数据从CPU内存到GPU端 当前被激活的buffer(显存)中
+    glBufferStorage( GL_ARRAY_BUFFER, sizeof(vertices), vertices, 0); // Memcpy H2D: from vertices(host) to active(bind) buffer obj 
 
+    // ff-test: read back buffer
 	GLfloat readback[12];
 	glGetNamedBufferSubData(Buffers[0], 0, sizeof(readback), readback);
 
