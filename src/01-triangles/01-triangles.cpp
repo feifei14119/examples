@@ -14,7 +14,7 @@ enum Attrib_IDs { vPosition = 0 };
 GLuint  VAOs[NumVAOs];
 GLuint  Buffers[NumBuffers];
 
-const GLuint  NumVertices = 6;
+const GLuint  NumVertices = 3;
 
 //----------------------------------------------------------------------------
 //
@@ -33,10 +33,6 @@ init( void )
         { -0.90f, -0.90f }, 
 		{  0.85f, -0.90f }, 
 		{ -0.90f,  0.85f },  // Triangle 1
-
-        {  0.90f, -0.85f }, 
-		{  0.90f,  0.90f }, 
-		{ -0.85f,  0.90f }   // Triangle 2
     };
 
     glCreateBuffers( NumBuffers, Buffers ); // GPU缓存对象数组
