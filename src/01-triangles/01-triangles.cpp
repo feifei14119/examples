@@ -43,8 +43,8 @@ init( void )
 	//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	
 	// feifei test: read buffer back
-	// GLfloat readback[12];
-	// glGetNamedBufferSubData(Buffers[0], 0, sizeof(readback), readback);
+	//GLfloat readback[12];
+	//glGetNamedBufferSubData(Buffers[0], 0, sizeof(vertices), readback);
 
 	// feifei test: map buffer to cpu
 	// only for glBufferData()
@@ -80,6 +80,9 @@ display( void )
 	glDrawArrays(GL_TRIANGLES, 0, NumVertices);
 	//glPointSize(15.0f); glDrawArrays(GL_POINTS, 0, NumVertices);
 	//glLineWidth(5.0f); glDrawArrays(GL_LINES, 0, NumVertices);
+
+   // GLfloat readback[3*2];
+    //glGetNamedBufferSubData(Buffers[0], 0, sizeof(GLfloat) * 2 * NumVertices, readback);
 }
 
 //----------------------------------------------------------------------------
@@ -88,16 +91,19 @@ display( void )
 //
 
 #ifdef _WIN32
-int CALLBACK WinMain(
-  _In_ HINSTANCE hInstance,
-  _In_ HINSTANCE hPrevInstance,
-  _In_ LPSTR     lpCmdLine,
-  _In_ int       nCmdShow
+#define _main() \
+CALLBACK WinMain( \
+  _In_ HINSTANCE hInstance, \
+  _In_ HINSTANCE hPrevInstance, \
+  _In_ LPSTR     lpCmdLine, \
+  _In_ int       nCmdShow \
 )
 #else
-int
+#define _main() \
 main( int argc, char** argv )
 #endif
+
+int _main()
 {
     glfwInit();
 
