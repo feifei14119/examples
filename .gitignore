@@ -3,3 +3,7 @@ build/*
 bin/*
 !bin/media/
 *.lib
+build32
+build64
+build32/*
+build64/*
