@@ -104,14 +104,14 @@ void GouraudExample::OnKey(int key, int scancode, int action, int mods)
 
 void GouraudExample::Display(bool auto_redraw)
 {
-	// feifei:ø™∆Ù≤‚ ‘
-	// ºÙ«–≤‚ ‘
+	// feifei:
+	// scissor test
 	glEnable(GL_SCISSOR_TEST); glScissor(0, 0, width*0.8, height);
-	// ƒ£∞Â≤‚ ‘
+	// stencil test 
 	//glEnable(GL_STENCIL_TEST);	glClearStencil(0);
 	//glStencilFunc(GL_EQUAL, 1, 1); glStencilOp(GL_KEEP, GL_INCR, GL_DECR);
 	//glStencilFunc(GL_NOTEQUAL, 1, 1); glStencilOp(GL_KEEP, GL_INCR, GL_DECR);
-	// …Ó∂»≤‚ ‘
+	// depth test
 	glDisable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	

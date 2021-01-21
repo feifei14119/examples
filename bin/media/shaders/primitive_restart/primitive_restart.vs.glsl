@@ -6,11 +6,11 @@ uniform mat4 projection_matrix;
 layout (location = 0) in vec4 position;
 layout (location = 1) in vec4 color;
 
-out vec4 vs_fs_color;
+out vec4 vs_fs_color;  // ???????? why no need to allocate buffer
 
 void main(void)
 {
-    const vec4 pos[3] = vec4[3](vec4(-0.3, -0.3, 0.0, 1.0), vec4(0.3, -0.3, 0.0, 1.0), vec4(-0.3, 0.3, 0.0, 1.0) );
+    //const vec4 pos[3] = vec4[3](vec4(-0.3, -0.3, 0.0, 1.0), vec4(0.3, -0.3, 0.0, 1.0), vec4(-0.3, 0.3, 0.0, 1.0) );
     vs_fs_color = color;
-    gl_Position = projection_matrix * (model_matrix * position);
+    gl_Position = projection_matrix * model_matrix * position;
 }

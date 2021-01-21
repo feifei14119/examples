@@ -992,26 +992,26 @@ public:
 
 typedef Tmat2<float> mat2;
 
-static inline mat4 frustum(float left, float right, float bottom, float top, float n, float f)
+static inline mat4 frustum(float left, float right, float bottom, float top, float _near, float _far)
 {
     mat4 result(mat4::identity());
 
     if ((right == left) ||
         (top == bottom) ||
-        (n == f) ||
-        (n < 0.0) ||
-        (f < 0.0))
+        (_near == _far) ||
+        (_near < 0.0) ||
+        (_far < 0.0))
        return result;
 
-    result[0][0] = (2.0f * n) / (right - left);
-    result[1][1] = (2.0f * n) / (top - bottom);
+    result[0][0] = (2.0f * _near) / (right - left);
+    result[1][1] = (2.0f * _near) / (top - bottom);
 
     result[2][0] = (right + left) / (right - left);
     result[2][1] = (top + bottom) / (top - bottom);
-    result[2][2] = -(f + n) / (f - n);
+    result[2][2] = -(_far + _near) / (_far - _near);
     result[2][3]= -1.0f;
 
-    result[3][2] = -(2.0f * f * n) / (f - n);
+    result[3][2] = -(2.0f * _far * _near) / (_far - _near);
     result[3][3] =  0.0f;
 
     return result;

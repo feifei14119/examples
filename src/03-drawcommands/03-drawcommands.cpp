@@ -84,35 +84,37 @@ void DrawCommandExample::Initialize(const char * title)
 	// A single triangle
 	static const GLfloat vertex_positions[] =
 	{
-		-1.0f, -1.0f,  0.0f, 1.0f,
-		1.0f, -1.0f,  0.0f, 1.0f,
-		-1.0f,  1.0f,  0.0f, 1.0f,
-		1.0f, 1.0f,  0.0f, 1.0f,
+		//  x,     y,     z,   zoom in Homogeneous coordinates
+		-1.0f, -1.0f,  0.0f, 1.0f, // left  bottom
+		 2.0f, -2.0f,  0.0f, 2.0f, // right bottom
+		-1.0f,  1.0f,  0.0f, 1.0f, // left  top
+		 1.0f,  1.0f,  0.0f, 1.0f, // right top
 	};
 
     // Color for each vertex
 	static const GLfloat vertex_colors[] =
 	{
-		1.0f, 1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f, 0.0f, 1.0f,
-		1.0f, 0.0f, 1.0f, 1.0f,
-		0.0f, 1.0f, 1.0f, 1.0f
+		// r,    g,    b, alph,
+		1.0f, 0.0f, 0.0f, 1.0f,
+		0.0f, 1.0f, 0.0f, 1.0f,
+		0.0f, 0.0f, 1.0f, 1.0f,
+		0.0f, 0.0f, 1.0f, 1.0f
 	};
 
 	// Indices for the triangle strips
 	static const GLushort vertex_indices[] = { 0, 1, 3 };
 
+	// Set up the vertex attributes objects
+	glGenVertexArrays(1, vao); // 
+	glBindVertexArray(vao[0]); // 
+
 	// Set up the element array buffer
-	// 索引显存
+	// index buffer
 	glGenBuffers(1, ebo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo[0]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(vertex_indices), vertex_indices, GL_STATIC_DRAW);
 	
-	// Set up the vertex attributes
-	glGenVertexArrays(1, vao); // 创建顶点对象数组
-	glBindVertexArray(vao[0]); // 
-
-	// 顶点和颜色显存
+	// buffer obj for vertext and color
 	size_t v_pos_sz = sizeof(vertex_positions);
 	size_t v_color_sz = sizeof(vertex_colors);
 	size_t v_pos_bias = 0;
@@ -124,7 +126,7 @@ void DrawCommandExample::Initialize(const char * title)
 	glBufferSubData(GL_ARRAY_BUFFER, v_pos_bias, v_pos_sz, vertex_positions);
 	glBufferSubData(GL_ARRAY_BUFFER, v_color_bias, v_color_sz, vertex_colors);
 	
-	// 设置shader输入参数
+	// program input parameters 
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(v_pos_bias));
 	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(v_color_bias));
 	glEnableVertexAttribArray(0);
@@ -140,7 +142,7 @@ void DrawCommandExample::Display(bool auto_redraw)
 	static const vmath::vec3 Z(0.0f, 0.0f, 1.0f);
 	static const vmath::vec4 black = vmath::vec4(0.0f, 0.0f, 0.0f, 0.0f);
 
-	mat4 model_matrix;
+	mat4 model_matrix; // translate matrix, move obj
 
 	// Setup
 	glEnable(GL_CULL_FACE);
@@ -151,18 +153,16 @@ void DrawCommandExample::Display(bool auto_redraw)
 	// Set up the model and projection matrix
 	vmath::mat4 projection_matrix(vmath::frustum(-1.0f, 1.0f, -aspect, aspect, 1.0f, 500.0f));
 	glUniformMatrix4fv(render_projection_matrix_loc, 1, GL_FALSE, projection_matrix);
-	glBindVertexArray(vao[0]);						// 用于非索引绘制
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo[0]);	// 用于索引绘制
+	glBindVertexArray(vao[0]);						// for dram without index
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo[0]);	// for draw with index
 
-	// Set up for a glDrawElements call
-	// 1. 非索引绘制
-	model_matrix = vmath::translate(-3.0f, 0.0f, -5.0f);
+	//1. Set up for a glDrawElements call. dram without index
+	model_matrix = vmath::translate(-3.0f, 1.0f, -5.0f);
 	glUniformMatrix4fv(render_model_matrix_loc, 1, GL_FALSE, model_matrix);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 
-	// DrawElements
-	// 2. 索引绘制
-	model_matrix = vmath::translate(-1.0f, 0.0f, -5.0f);
+	//2. DrawElements. draw with index
+	model_matrix = vmath::translate(-1.0f, -1.0f, -5.0f);
 	glUniformMatrix4fv(render_model_matrix_loc, 1, GL_FALSE, model_matrix);
 	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_SHORT, NULL);
 

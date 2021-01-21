@@ -103,7 +103,7 @@ void LoadTextureExample::Initialize(const char * title)
 
     glLinkProgram(base_prog);
 
-    glGenTextures(1, &tex);
+    glGenTextures(1, &tex); // create 1 texture obj
     glBindTexture(GL_TEXTURE_2D, tex);
     glTexStorage2D(GL_TEXTURE_2D, 4, GL_RGBA8, 8, 8);
 

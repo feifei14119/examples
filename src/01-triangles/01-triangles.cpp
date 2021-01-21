@@ -17,24 +17,18 @@ GLuint  Buffers[NumBuffers];
 
 const GLuint  NumVertices = 3;
 
-//----------------------------------------------------------------------------
-//
-// init
-//
-
-void
-init( void )
+void init( void )
 {
-    glGenVertexArrays( NumVAOs, VAOs );		// create 1 Vtx objs
-    glBindVertexArray( VAOs[Triangles] );
+    glGenVertexArrays( NumVAOs, VAOs );		// create 1 Vtx objs,?????????? on GPU or CPU?
+    glBindVertexArray( VAOs[Triangles] );   // ?????????? why bind here?
 
     // vertext host
-    GLfloat  vertices[NumVertices][2] = 
+    GLfloat  vertices[] = 
 	{
-		//   X,      Y 
-        { -0.90f, -0.90f }, 
-		{  0.85f, -0.90f }, 
-		{ -0.90f,  0.85f }
+        //   X,      Y 
+        -0.90f, -0.90f, // first point
+         0.85f, -0.90f, // second point
+        -0.90f,  0.85f  // third point
     };
 
     glCreateBuffers( NumBuffers, Buffers ); // create 1 buffer objs
@@ -64,44 +58,20 @@ init( void )
     glEnableVertexAttribArray( vPosition );
 }
 
-//----------------------------------------------------------------------------
-//
-// display
-//
-
-void
-display( void )
+void display( void )
 {
     static const float black[] = { 0.0f, 0.0f, 0.0f, 0.0f };
 
     glClearBufferfv(GL_COLOR, 0, black);
 
     glBindVertexArray( VAOs[Triangles] );
-	glDrawArrays(GL_TRIANGLES, 0, NumVertices);
-	//glPointSize(15.0f); glDrawArrays(GL_POINTS, 0, NumVertices);
+    glDrawArrays(GL_TRIANGLES, 0, NumVertices);
+    //glPointSize(15.0f); glDrawArrays(GL_POINTS, 0, NumVertices);
 	//glLineWidth(5.0f); glDrawArrays(GL_LINES, 0, NumVertices);
 
-   // GLfloat readback[3*2];
-    //glGetNamedBufferSubData(Buffers[0], 0, sizeof(GLfloat) * 2 * NumVertices, readback);
+    // GLfloat readback[3*2];
+    // glGetNamedBufferSubData(Buffers[0], 0, sizeof(GLfloat) * 2 * NumVertices, readback);
 }
-
-//----------------------------------------------------------------------------
-//
-// main
-//
-
-#ifdef _WIN32
-#define _main() \
-CALLBACK WinMain( \
-  _In_ HINSTANCE hInstance, \
-  _In_ HINSTANCE hPrevInstance, \
-  _In_ LPSTR     lpCmdLine, \
-  _In_ int       nCmdShow \
-)
-#else
-#define _main() \
-main( int argc, char** argv )
-#endif
 
 int _main()
 {
