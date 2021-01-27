@@ -56,7 +56,7 @@ void ViewportArrayApplication::Initialize(const char * title)
     static const char geometry_shader_source[] =
         "#version 410\n"
         "\n"
-        "layout (triangles, invocations = 4) in;\n"
+        "layout (triangles, invocations = 4) in;\n"         // input type
         "layout (triangle_strip, max_vertices = 3) out;\n"
         "\n"
         "uniform mat4 model_matrix[4];\n"

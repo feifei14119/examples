@@ -161,7 +161,7 @@ void LoadTextureExample::Finalize(void)
     glUseProgram(0);
     glDeleteProgram(base_prog);
     glDeleteTextures(1, &tex);
-    glDeleteVertexArrays(1, &tex);
+    glDeleteVertexArrays(1, &vao);
 }
 
 void LoadTextureExample::Resize(int width, int height)

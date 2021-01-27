@@ -9,8 +9,7 @@ uniform mat4  P;
 
 //----------------------------------------------------------------------------
 
-float
-Hanning( vec2 p )
+float Hanning( vec2 p )
 {
     p -= 0.5; // map unit square to [-.5, .5]
 
@@ -24,8 +23,7 @@ Hanning( vec2 p )
 
 //----------------------------------------------------------------------------
 
-void
-main()
+void main()
 {
     float u = gl_TessCoord.x;
     float v = gl_TessCoord.y;
@@ -36,4 +34,5 @@ main()
     pos.z = Hanning( gl_TessCoord.xy );
     
     gl_Position = P * MV * pos;
+    gl_Position = pos;          // not use translate
 }

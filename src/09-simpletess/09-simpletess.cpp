@@ -69,11 +69,12 @@ void SimpleTssellationExample::Initialize(const char * title)
     glGenBuffers( NumBuffers, buffers );
     glBindBuffer( GL_ARRAY_BUFFER, buffers[Array] );
     
-    GLfloat vertices[NumVertices][2] = {
-	{ -0.5, -0.5 },
-	{  0.5, -0.5 },
-	{  0.5,  0.5 },
-	{ -0.5,  0.5 }
+    GLfloat vertices[NumVertices][2] =
+    {
+	    { -0.5, -0.5 },
+	    {  0.5, -0.5 },
+	    {  0.5,  0.5 },
+	    { -0.5,  0.5 }
     };
     glBufferData( GL_ARRAY_BUFFER, sizeof(vertices),
 		  vertices, GL_STATIC_DRAW );
@@ -94,32 +95,34 @@ void SimpleTssellationExample::Initialize(const char * title)
     // set up vertex arrays
     GLuint vPosition = glGetAttribLocation( program, "vPosition" );
     glEnableVertexAttribArray( vPosition );
-    glVertexAttribPointer( vPosition, 2, GL_FLOAT, GL_FALSE, 0,
-			   BUFFER_OFFSET(0) );
+    glVertexAttribPointer( vPosition, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0) );
 
     PLoc = glGetUniformLocation( program, "P" );
     
-    mat4  modelview = Translate( 0.0f, 0.0f, -0.5f * (zNear + zFar) ) *
-	RotateX( -50.0 );
-    glUniformMatrix4fv( glGetUniformLocation( program, "MV" ),
-			1, GL_TRUE, modelview );
+    mat4  modelview = Translate( 0.0f, 0.0f, -0.5f * (zNear + zFar) ) *	RotateX( -50.0 );
+    glUniformMatrix4fv( glGetUniformLocation( program, "MV" ), 1, GL_TRUE, modelview );
 
-    glPatchParameteri( GL_PATCH_VERTICES, 4 );
+    glPatchParameteri( GL_PATCH_VERTICES, NumVertices); // tell OGL how many vertext in one patch
 
     glEnable( GL_DEPTH_TEST );
 
     glClearColor( 0.0, 0.0, 0.0, 1.0 );
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 }
 
 //----------------------------------------------------------------------------
 
 void SimpleTssellationExample::Display(bool auto_redraw)
 {
-    mat4  projection = Perspective( 60.0, aspect, zNear, zFar );
+    mat4  projection = Perspective( 100.0, aspect, zNear, zFar );
     glUniformMatrix4fv( PLoc, 1, GL_TRUE, projection );
 
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     glDrawArrays( GL_PATCHES, 0, NumVertices );
+
+   // glDrawArrays(GL_TRIANGLES, 0, NumVertices);
+    //glPointSize(15.0f); glDrawArrays(GL_POINTS, 0, NumVertices);
+    //glLineWidth(5.0f); glDrawArrays(GL_LINES, 0, NumVertices);
 
     base::Display(auto_redraw);
 }

@@ -44,7 +44,7 @@ void FurApplication::Initialize(const char * title)
 
     static const char base_vs_source[] =
         "#version 410\n"
-        "\n"
+        "\n" 
         "layout (location = 0) in vec4 position_in;\n"
         "layout (location = 1) in vec3 normal_in;\n"
         "layout (location = 2) in vec2 texcoord_in;\n"
@@ -241,7 +241,7 @@ void FurApplication::Display(bool auto_redraw)
                     vmath::rotate(180.0f, Z) *
                     vmath::translate(0.0f, -80.0f, 0.0f));
 
-    glUseProgram(base_prog);
+    /*glUseProgram(base_prog);
 
     glUniformMatrix4fv(base_model_matrix_pos, 1, GL_FALSE, m[0]);
     glUniformMatrix4fv(base_projection_matrix_pos, 1, GL_FALSE, p);
@@ -252,7 +252,7 @@ void FurApplication::Display(bool auto_redraw)
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
 
-    object.Render();
+    object.Render();*/
 
     glUseProgram(fur_prog);
 
